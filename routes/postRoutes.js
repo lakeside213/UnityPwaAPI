@@ -6,27 +6,22 @@ const requireAuth = passport.authenticate("jwt", { session: false });
 const requireSignin = passport.authenticate("local", { session: false });
 const Post = mongoose.model("Post");
 const Comment = mongoose.model("Comment");
-
+const User = mongoose.model("user");
 module.exports = app => {
   app.post("/api/post", requireAuth, async (req, res) => {
     const { title, category, description, tags } = req.body;
+    const user = await User.findOne({ _id: new ObjectId(id) });
     const post = new Post({
       title: title,
       category: category,
       description: description,
 
-      _user: req.user.id,
+      _user: user,
       createdAt: Date.now()
     });
 
-    post.save().then(
-      doc => {
-        res.send(doc._id);
-      },
-      e => {
-        console.log(e);
-      }
-    );
+    await post.save();
+    res.send(post._id);
   });
   app.post("/api/fetch/post", async (req, res) => {
     const { id } = req.body;
