@@ -26,12 +26,23 @@ module.exports = app => {
   app.post("/api/fetch/post", async (req, res) => {
     const { id } = req.body;
 
-    let post = await Post.find({ _id: new ObjectId(id) });
-
+    let post = await Post.findOne({ _id: new ObjectId(id) });
+    let user = await User.findOne({ _id: new ObjectId(post._user) }).select({
+      email: false,
+      password: false,
+      likes: false,
+      bookmarks: false
+    });
+    const comments = await Comment.find({ _post: new ObjectId(post._id) });
     try {
-      post[0].views += 1;
+      post.views += 1;
+      await post.save();
 
-      await post[0].save();
+      post = {
+        post,
+        user,
+        comments
+      };
       res.send(post);
     } catch (err) {
       console.log(err);
@@ -44,13 +55,13 @@ module.exports = app => {
     res.send(posts);
   });
 
-  app.post("/api/fetch/comment", async (req, res) => {
-    const { _post } = req.body;
-    console.log(_post);
-    const comments = await Comment.find({ _post: new ObjectId(_post) });
-    console.log(comments);
-    res.send(comments);
-  });
+  // app.post("/api/fetch/comment", async (req, res) => {
+  //   const { _post } = req.body;
+  //   console.log(_post);
+  //   const comments = await Comment.find({ _post: new ObjectId(_post) });
+  //   console.log(comments);
+  //   res.send(comments);
+  // });
   app.post("/api/post/comment", requireAuth, async (req, res) => {
     const { _post, description, _responseUser } = req.body;
     if (_responseUser) {
