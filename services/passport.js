@@ -4,7 +4,7 @@ const User = require("../models/user");
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const LocalStrategy = require("passport-local");
-
+const SECRETKEY = process.env.secret;
 const localOptions = {
   usernameField: "email"
 };
@@ -34,9 +34,9 @@ const localLogin = new LocalStrategy(localOptions, function(
 });
 
 const jwtOptions = {
-  jwtFromRequest: ExtractJwt.fromHeader("authorization"),
+  jwtFromRequest: ExtractJwt.fromHeader("authorization".toLowerCase()),
   // secretOrKey: process.env.secret || config.secret
-  secretOrKey: process.env.secret
+  secretOrKey: SECRETKEY
 };
 
 const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
@@ -44,7 +44,6 @@ const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
 
   User.findById(payload.sub, function(err, user) {
     if (err) {
-      console.log(err);
       return done(err, false);
     }
 

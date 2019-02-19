@@ -21,7 +21,7 @@ mongoose.connection.on("error", function(err) {
   console.log("Could not connect to mongo server!");
   return console.log(err);
 });
-app.use(bodyParser.json());
+app.use(bodyParser.json({ type: "*/*" }));
 
 app.use(cors());
 router(app);
