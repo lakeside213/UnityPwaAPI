@@ -40,7 +40,7 @@ const jwtOptions = {
 
 const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
   //see if User ID exists
-  console.log(jwtOptions.secretOrKey);
+  console.log("secret key is" + jwtOptions.secretOrKey);
   User.findById(payload.sub, function(err, user) {
     if (err) {
       return done(err, false);
