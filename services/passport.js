@@ -1,6 +1,6 @@
 const passport = require("passport");
 const User = require("../models/user");
-const config = require("../config");
+// const config = require("../config");
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const LocalStrategy = require("passport-local");
@@ -41,7 +41,7 @@ const jwtOptions = {
 
 const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
   //see if User ID exists
-  console.log("secret key is" + jwtOptions.secretOrKey);
+
   User.findById(payload.sub, function(err, user) {
     if (err) {
       return done(err, false);
