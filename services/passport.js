@@ -35,12 +35,12 @@ const localLogin = new LocalStrategy(localOptions, function(
 
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromHeader("authorization"),
-  secretOrKey: process.env.secretKey || config.secret
+  secretOrKey: "kjsnosjndodopi"
 };
 
 const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
   //see if User ID exists
-  console.log("secret key is" + jwtOptions.secretOrKey);
+
   User.findById(payload.sub, function(err, user) {
     if (err) {
       return done(err, false);
