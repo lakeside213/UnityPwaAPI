@@ -34,7 +34,7 @@ const localLogin = new LocalStrategy(localOptions, function(
 });
 
 const jwtOptions = {
-  jwtFromRequest: ExtractJwt.fromHeader("authorization".toLowerCase()),
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   // secretOrKey: process.env.secret || config.secret
   secretOrKey: SECRETKEY
 };
